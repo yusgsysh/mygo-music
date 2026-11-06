@@ -14,6 +14,16 @@ import (
 	"time"
 )
 
+// A cover's cookie rides in its URL's fragment, and stays there through the
+// size a view asks it at, for Fetch to take out.
+func TestSizedKeepsCoverCookie(t *testing.T) {
+	u := "https://example.com/cover?coverId=x#mygo-cookie=music-token%3Dabc"
+	got, px := splitSized(sized(u, 600))
+	if got != u || px != 600 {
+		t.Errorf("sized cover: %q at %d, want %q at 600", got, px, u)
+	}
+}
+
 // An animated WebP cover, as some playlists have, shows its first frame,
 // in the bitmap too, which decodes its data again once it drops its pixels.
 func TestAnimatedWebPCover(t *testing.T) {
